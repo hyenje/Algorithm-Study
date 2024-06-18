@@ -51,7 +51,8 @@ void solve()
 
     for (int i = 1; i <= v; i++)
     {
-        cl[i] = 1;
+        if (cl[i] == 0)
+            cl[i] = 1;
         go(i);
     }
 
