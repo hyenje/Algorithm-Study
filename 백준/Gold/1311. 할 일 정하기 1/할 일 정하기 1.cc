@@ -38,11 +38,12 @@ void solve()
     {
         for (int j = 1; j < (1 << n); j++)
         {
-            for (int k = 0; k < n; k++)
-            {
-                if (j ^ (1 << k))
-                    dp[i][j | (1 << k)] = min(dp[i - 1][j] + arr[k][i], dp[i][j | (1 << k)]);
-            }
+            if (dp[i - 1][j] != l_INF)
+                for (int k = 0; k < n; k++)
+                {
+                    if (j ^ (1 << k))
+                        dp[i][j | (1 << k)] = min(dp[i - 1][j] + arr[k][i], dp[i][j | (1 << k)]);
+                }
         }
     }
 
