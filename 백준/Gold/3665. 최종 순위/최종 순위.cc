@@ -25,13 +25,15 @@ bool compare(pii a, pii b)
     return a.S > b.S;
 }
 
+bool edge[512][512];
+
 void solve()
 {
     int n, m, a, b, cnt, val;
     cin >> n;
     vector<int> arr(n);
-    vector<vector<int>> edge(512, vector<int>(512));
     vector<pii> num(n);
+    memset(edge, 0, sizeof edge);
     cnt = n;
     for (int i = 0; i < n; i++)
     {
