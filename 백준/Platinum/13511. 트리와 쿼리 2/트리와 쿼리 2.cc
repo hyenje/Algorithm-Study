@@ -21,8 +21,8 @@ const int mx[8] = {1, -1, 0, 0, 1, 1, -1, -1};
 const int my[8] = {0, 0, -1, 1, 1, -1, 1, -1};
 
 vector<vector<pll>> arr(100'123);
-int depth[100'123];
-ll dist[20][100'123], parent[20][100'123];
+int depth[100'123], parent[20][100'123];
+ll dist[20][100'123];
 
 void go(int pa, int nd, int dep, int dis)
 {
