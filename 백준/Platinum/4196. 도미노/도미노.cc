@@ -69,12 +69,18 @@ void solve()
         cin >> a >> b;
         arr[a].push_back(b);
     }
+
     for (int i = 1; i <= n; i++)
-    {
         if (!parent[i])
             go(i);
-    }
+
     sort(answer.begin(), answer.end());
+    // for (auto i : answer)
+    // {
+    //     for (auto j : i)
+    //         cout << j << ' ';
+    //     cout << "-1\n";
+    // }
 
     int num = 0;
     for (auto i : answer)
