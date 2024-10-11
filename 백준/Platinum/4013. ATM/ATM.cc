@@ -20,18 +20,18 @@ using namespace std;
 const int mx[8] = {1, -1, 0, 0, 1, 1, -1, -1};
 const int my[8] = {0, 0, -1, 1, 1, -1, 1, -1};
 
-ll finished[500'123], parent[500'123], val[500'123], res[500'123], id = 1;
-vector<vector<ll>> arr, brr, answer;
-vector<ll> uni, cnt, nval, nres;
-stack<ll> s;
-ll real_answer = 0, big = 0;
+int finished[500'123], parent[500'123], val[500'123], res[500'123], id = 1;
+vector<vector<int>> arr, brr, answer;
+vector<int> uni, cnt, nval, nres;
+stack<int> s;
+int real_answer = 0, big = 0;
 
-ll go(ll nd)
+int go(int nd)
 {
     parent[nd] = id++;
     s.push(nd);
 
-    ll p = parent[nd];
+    int p = parent[nd];
     for (auto i : arr[nd])
     {
         if (!parent[i])
@@ -42,10 +42,10 @@ ll go(ll nd)
 
     if (p == parent[nd])
     {
-        vector<ll> scc;
+        vector<int> scc;
         while (nd)
         {
-            ll node = s.top();
+            int node = s.top();
             s.pop();
             scc.push_back(node);
             finished[node] = 1;
@@ -60,7 +60,7 @@ ll go(ll nd)
 
 void solve()
 {
-    ll n, m, a, b, s, k, ans = 0;
+    int n, m, a, b, s, k, ans = 0;
     cin >> n >> m;
     arr.resize(n + 1);
     uni.resize(n + 1);
@@ -70,16 +70,16 @@ void solve()
         cin >> a >> b;
         arr[a].push_back(b);
     }
-    for (ll i = 1; i <= n; i++)
+    for (int i = 1; i <= n; i++)
         cin >> val[i];
     cin >> s >> k;
-    for (ll i = 0; i < k; i++)
+    for (int i = 0; i < k; i++)
     {
         cin >> a;
         res[a] = 1;
     }
 
-    for (ll i = 1; i <= n; i++)
+    for (int i = 1; i <= n; i++)
         if (!parent[i])
             go(i);
     sort(answer.begin(), answer.end());
@@ -88,10 +88,10 @@ void solve()
     cnt.resize(answer.size());
     nres.resize(answer.size());
     nval.resize(answer.size());
-    ll num = 0;
+    int num = 0;
     for (auto i : answer)
     {
-        for (ll j = 0; j < i.size(); j++)
+        for (int j = 0; j < i.size(); j++)
         {
             uni[i[j]] = num;
             nval[num] += val[i[j]];
@@ -100,7 +100,7 @@ void solve()
         num++;
     }
     s = uni[s];
-    for (ll i = 1; i < arr.size(); i++)
+    for (int i = 1; i < arr.size(); i++)
     {
         for (auto j : arr[i])
         {
@@ -118,7 +118,7 @@ void solve()
     //     cout << "-1\n";
     // }
     queue<int> q;
-    vector<ll> money(answer.size());
+    vector<int> money(answer.size());
     q.push(s);
     money[s] = nval[s];
     while (q.size())
