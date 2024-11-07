@@ -1,8 +1,9 @@
 #include <stdio.h>
 
+    long long int A[10'000'000];
+
 int main()
 {
-    long long int A[100];
     int a , i;
 
     scanf("%d",&a);
