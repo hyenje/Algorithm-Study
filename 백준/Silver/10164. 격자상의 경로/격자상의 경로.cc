@@ -21,21 +21,18 @@ using namespace std;
 const int mx[8] = {1, -1, 0, 0, 1, 1, -1, -1};
 const int my[8] = {0, 0, -1, 1, 1, -1, 1, -1};
 
-ll arr[20][20];
-
 void solve()
 {
+    vector<vector<ll>> arr(20, vector<ll>(20, 1));
+
     ll n, m, k;
     cin >> n >> m >> k;
-    ll x = k / m + 1, y = k % m;
-    // cout << x << ' ' << y << '\n';
-    for (int i = 1; i <= n; i++)
-        arr[i][1] = 1;
-    for (int j = 1; j <= m; j++)
-        arr[1][j] = 1;
 
-    for (int i = 2; i <= n; i++)
-        for (int j = 2; j <= m; j++)
+    ll x = k / m + (k % m ? 1 : 0), y = (k % m ? k % m : m);
+    // cout << x << ' ' << y << '\n';
+
+    for (int i = 2; i < 20; i++)
+        for (int j = 2; j < 20; j++)
             arr[i][j] = arr[i - 1][j] + arr[i][j - 1];
 
     if (k == 0)
