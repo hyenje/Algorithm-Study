@@ -1,103 +1,70 @@
-/*
- */
 #include <bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-using namespace __gnu_pbds;
 using namespace std;
-#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>
-#define ll long long int
-#define xll __int128
-#define F first
-#define S second
-#define pii pair<int, int>
-#define pll pair<ll, ll>
-#define LL_INF 9'223'372'036'854'775'807
-#define INF 2'147'483'647
-#define l_INF 1'000'000'007
-#define MINF -2'147'483'648
-#define MOD 1'000'000'007
-const int mx[8] = {1, -1, 0, 0, 1, 1, -1, -1};
-const int my[8] = {0, 0, -1, 1, 1, -1, 1, -1};
+using ull = unsigned long long;
+static const int MOD = 1000000007;
 
-ll POW(ll val, ll para)
-{
-    if (para == 0)
-        return 1;
-    ll a = val, b = 1;
-
-    while (para)
-    {
-        if (para & 1)
-            b = (b * a) % MOD;
-        a = (a * a) % MOD;
-        para >>= 1;
-    }
-
-    return b % MOD;
-}
-
-void solve()
-{
-    ll n, k, val, answer = 0, number = 0;
-    cin >> n >> k;
-    if (k == 1)
-    {
-        cout << n + 1 << ' ' << 1 << '\n';
-        return;
-    }
-    vector<int> arr(n);
-    for (int i = 0; i < n; i++)
-        cin >> arr[i];
-
-    int l = 1, r = min(40ll, n);
-
-    while (l < r)
-    {
-        int mid = l + r >> 1;
-        deque<int> d;
-        set<deque<int>> s;
-        ll val = (ll)POW(k, mid);
-        for (auto i : arr)
-        {
-            if (d.size() == mid)
-                d.pop_front();
-            d.push_back(i);
-            if (d.size() == mid)
-                s.insert(d);
-        }
-
-        if (s.size() < val)
-        {
-            r = mid;
-            answer = mid;
-            number = (val + MOD - s.size()) % MOD;
-            // for (auto i : s)
-            // {
-            //     for (auto j : i)
-            //         cout << j << ' ';
-            //     cout << '\n';
-            // }
-            // cout << '\n';
-        }
-        else
-            l = mid + 1;
-    }
-
-    cout << answer << ' ' << number << '\n';
-}
-
-int main()
-{
+int main(){
     ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(NULL);
-    // ll t;
-    // cin >> t;
-    // while (t--)
-    solve();
+    cin.tie(nullptr);
 
+    int N, M;
+    cin >> N >> M;
+    vector<int> A(N);
+    for(int i = 0; i < N; i++) {
+        cin >> A[i];
+    }
+
+    // 1) M = 1 특수 처리
+    if(M == 1){
+        // A가 모두 1이므로 최장 연속 1의 길이는 N
+        // 최소 L = N+1, 개수 = 1
+        cout << (N + 1) << " " << 1 << "\n";
+        return 0;
+    }
+
+    // 2) L_max 찾기: M^L > N 인 최소 L
+    long long pow64 = 1;
+    int Lmax = 0;
+    for(int L = 1; ; L++){
+        pow64 *= M;
+        if(pow64 > N){
+            Lmax = L;
+            break;
+        }
+    }
+
+    // 3) 롤링 해시 전처리 (base는 적당한 상수)
+    const ull BASE = 91138233;
+    vector<ull> h(N+1, 0), p(N+1, 1);
+    for(int i = 0; i < N; i++){
+        h[i+1] = h[i] * BASE + (unsigned)A[i];
+        p[i+1] = p[i] * BASE;
+    }
+
+    // 4) 각 L마다 D(L) 구해서 최초로 D(L) < M^L 판정
+    long long mPow = 1;  // M^L (64비트)
+    for(int L = 1; L <= Lmax; L++){
+        mPow = mPow * M;  // 이제 mPow = M^L
+
+        // 모든 길이-L 부분수열 해시를 집합에
+        unordered_set<ull> st;
+        st.reserve(N - L + 1);
+        for(int i = 0; i + L <= N; i++){
+            // [i, i+L) 구간 해시
+            ull cur = h[i+L] - h[i] * p[L];
+            st.insert(cur);
+        }
+        int distinct = (int)st.size();  // D(L)
+
+        if(distinct < mPow){
+            // 정답 L, 개수 = M^L - D(L) (mod)
+            long long missing = (mPow - distinct) % MOD;
+            if(missing < 0) missing += MOD;
+            cout << L << " " << missing << "\n";
+            return 0;
+        }
+    }
+
+    // 이 지점에 도달하는 일은 없습니다.
     return 0;
 }
-/*
- */
