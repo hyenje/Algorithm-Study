@@ -25,34 +25,38 @@ using namespace std;
 const int mx[8] = {1, -1, 0, 0, 1, 1, -1, -1};
 const int my[8] = {0, 0, -1, 1, 1, -1, 1, -1};
 
-int dp[250'123][2], n;
-vector<int> arr;
+ll dp[250'123][2], n;
+vector<ll> arr;
 
-void go(int node) {
+void go(ll node) {
     if (node == n)
         return;
     go(node + 1);
 
     dp[node][1] = dp[node + 1][0] + 1;
     dp[node][0] = max(dp[node + 1][1] + arr[node], dp[node + 1][0] + arr[node]);
-    // cout << n << ' ' << dp[node][0] << ' ' << dp[node][1] << ' ' << arr[node] << endl;
 }
 
 void solve() {
     cin >> n;
     arr.resize(n);
 
-    for (int i = 0; i < n; i++)
+    for (ll i = 0; i < n; i++)
         cin >> arr[i];
     arr.push_back(arr[0]);
     arr.push_back(arr[1]);
 
-    go(0);
+    dp[0][0] = arr[0];
+    dp[0][1] = 1;
+    for (ll i = 1; i < n; i++) {
+        dp[i][1] = dp[i - 1][0] + 1;
+        dp[i][0] = max(dp[i - 1][1] + arr[i], dp[i - 1][0] + arr[i]);
+    }
 
-    if (arr[n - 1]) {
-        cout << max(dp[0][0], dp[0][1]) << endl;
+    if (arr[0]) {
+        cout << max(dp[n - 1][0], dp[n - 1][1]) << endl;
     } else
-        cout << dp[0][0] << endl;
+        cout << dp[n - 1][0] << endl;
 }
 
 /*
